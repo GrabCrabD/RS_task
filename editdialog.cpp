@@ -5,6 +5,7 @@ editDialog::editDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::editDialog)
 {
+    this->setModal(true);
     ui->setupUi(this);
     ui->selectedTaskLabel->setVisible(false);
 }
@@ -20,8 +21,6 @@ void editDialog::setTaskInfo(const Task &task, int selectedRow)
     ui->descriptionLineEdit->setText(task.getDescription());
     ui->dateEdit->setDate(task.getDate());
     ui->selectedTaskLabel->setText(QString::number(selectedRow));
-
-    qDebug() << "SetTaskInfo in editDialog";
 }
 
 void editDialog::on_editSaveButton_clicked()
@@ -36,12 +35,11 @@ void editDialog::on_editSaveButton_clicked()
     editedTask.setDate(date);
 
     emit saveTask(editedTask, selectedRow);
-    qDebug() << "Save button clicked in editDialog";
 
-    accept();
+    close();
 }
 
 void editDialog::on_editCancelButton_clicked()
 {
-    reject();
+    close();
 }

@@ -19,6 +19,7 @@ toDoApp::toDoApp(QWidget *parent)
     ui->changeStatusButton->setEnabled(false);
 
     connect(ui->tableWidget, &QTableWidget::itemSelectionChanged, this, &toDoApp::handleRowSelectionChange);
+    connect(&dialogForm, &editDialog::saveTask, this, &toDoApp::slotForm);
 
     loadTasks();
     refreshTasks();
@@ -110,11 +111,8 @@ void toDoApp::on_editButton_clicked() {
     if (selectedRow >= 0 && selectedRow < ui->tableWidget->rowCount()) {
         Task &task = taskList[selectedRow];
 
-        dialogForm.setModal(true);
         dialogForm.setTaskInfo(task, selectedRow);
         dialogForm.exec();
-
-        connect(&dialogForm, &editDialog::saveTask, this, &toDoApp::slotForm);
 
         ui->editButton->setEnabled(false);
         ui->deleteButton->setEnabled(false);
@@ -124,16 +122,12 @@ void toDoApp::on_editButton_clicked() {
 
 void toDoApp::slotForm(Task &editedTask, int selectedRow) {
 
-    qDebug() << "Received edited task:" << editedTask.getTitle() << editedTask.getDescription() << editedTask.getDate().toString("dd.MM.yyyy");
-    qDebug() << "Selected row:" << selectedRow;
-
     Task &task = taskList[selectedRow];
     task.setTitle(editedTask.getTitle());
     task.setDescription(editedTask.getDescription());
     task.setDate(editedTask.getDate());
 
     refreshTasks();
-    qDebug() << "Data updated in toDoApp";
 }
 
 // активация клавиш изменения состояния только при выделении строки с таском
