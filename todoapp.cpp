@@ -104,28 +104,36 @@ void toDoApp::on_changeStatusButton_clicked() {
 }
 
 void toDoApp::on_editButton_clicked() {
+
     int selectedRow = ui->tableWidget->currentRow();
 
     if (selectedRow >= 0 && selectedRow < ui->tableWidget->rowCount()) {
         Task &task = taskList[selectedRow];
-        QString taskTitle = ui->addTaskLine->text();
-        QString taskDescrip = ui->addDescripLine->text();
-        QDate taskDeadline = ui->deadlineDate->date();
-        if (!taskTitle.isEmpty()) {
-            task.setTitle(taskTitle);
-            task.setDescription(taskDescrip);
-            task.setDate(taskDeadline);
 
-            refreshTasks();
+        dialogForm.setModal(true);
+        dialogForm.setTaskInfo(task, selectedRow);
+        dialogForm.exec();
 
-            ui->addTaskLine->clear();
-            ui->addDescripLine->clear();
+        connect(&dialogForm, &editDialog::saveTask, this, &toDoApp::slotForm);
 
-            ui->editButton->setEnabled(false);
-            ui->deleteButton->setEnabled(false);
-            ui->changeStatusButton->setEnabled(false);
-        }
+        ui->editButton->setEnabled(false);
+        ui->deleteButton->setEnabled(false);
+        ui->changeStatusButton->setEnabled(false);
     }
+}
+
+void toDoApp::slotForm(Task &editedTask, int selectedRow) {
+
+    qDebug() << "Received edited task:" << editedTask.getTitle() << editedTask.getDescription() << editedTask.getDate().toString("dd.MM.yyyy");
+    qDebug() << "Selected row:" << selectedRow;
+
+    Task &task = taskList[selectedRow];
+    task.setTitle(editedTask.getTitle());
+    task.setDescription(editedTask.getDescription());
+    task.setDate(editedTask.getDate());
+
+    refreshTasks();
+    qDebug() << "Data updated in toDoApp";
 }
 
 // активация клавиш изменения состояния только при выделении строки с таском
@@ -178,36 +186,32 @@ void toDoApp::loadTasks() {
     settings.endArray();
 }
 
-void toDoApp::applyFilter() {
-    QList<Task> filteredTasks;
+//void toDoApp::applyFilter() {
+//    QList<Task> filteredTasks;
 
-    for (Task &task : taskList) {
-        bool passFilter = true;
+//    for (Task &task : taskList) {
+//        bool passFilter = true;
 
-        if (!filterTitle.isEmpty() && !task.getTitle().contains(filterTitle)) {
-            passFilter = false;
-        }
+//        if (!filterTitle.isEmpty() && !task.getTitle().contains(filterTitle)) {
+//            passFilter = false;
+//        }
 
-        if (!filterDescription.isEmpty() && !task.getDescription().contains(filterDescription)) {
-            passFilter = false;
-        }
+//        if (!filterDescription.isEmpty() && !task.getDescription().contains(filterDescription)) {
+//            passFilter = false;
+//        }
 
-        if (filterMinDate.isValid() && task.getDate() < filterMinDate) {
-            passFilter = false;
-        }
+//        if (filterDate.isValid() && task.getDate() == filterDate) {
+//            passFilter = false;
+//        }
 
-        if (filterMaxDate.isValid() && task.getDate() > filterMaxDate) {
-            passFilter = false;
-        }
+//        if (filterCompleted && !task.isCompleted()) {
+//            passFilter = false;
+//        }
 
-        if (filterCompleted && !task.isCompleted()) {
-            passFilter = false;
-        }
+//        if (passFilter) {
+//            filteredTasks.append(task);
+//        }
 
-        if (passFilter) {
-            filteredTasks.append(task);
-        }
-
-        updateTaskTable(filteredTasks);
-    }
-}
+//        updateTaskTable(filteredTasks);
+//    }
+//}

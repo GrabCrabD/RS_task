@@ -110,7 +110,7 @@
          <widget class="QDateEdit" name="deadlineDate">
           <property name="dateTime">
            <datetime>
-            <hour>4</hour>
+            <hour>0</hour>
             <minute>0</minute>
             <second>0</second>
             <year>2023</year>
@@ -121,54 +121,6 @@
          </widget>
         </item>
        </layout>
-      </item>
-     </layout>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <widget class="QRadioButton" name="allStatus">
-        <property name="text">
-         <string>All</string>
-        </property>
-        <property name="checked">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="doneStatus">
-        <property name="text">
-         <string>Done</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QRadioButton" name="inProgressStatus">
-        <property name="text">
-         <string>In progress</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="resetStatusButton">
-        <property name="text">
-         <string>Reset</string>
-        </property>
-       </widget>
       </item>
      </layout>
     </item>

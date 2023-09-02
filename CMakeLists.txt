@@ -19,6 +19,9 @@ set(PROJECT_SOURCES
         todoapp.ui
         task.h
         task.cpp
+        editdialog.cpp
+        editdialog.h
+        editdialog.ui
 )
 
 if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)

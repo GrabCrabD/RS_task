@@ -17,20 +17,18 @@ public:
     explicit editDialog(QWidget *parent = nullptr);
     ~editDialog();
 
-    void setTaskInfo(const Task &task);
+    void setTaskInfo(const Task &task, int selectedRow);
 
 signals:
-    void saveTask(const Task &);
-    void sig(QString);
+    void saveTask(Task &, int);
 
 private slots:
     void on_editSaveButton_clicked();
     void on_editCancelButton_clicked();
 
-    void on_pushButton_clicked();
-
 private:
     Ui::editDialog *ui;
+    Task editedTask;
 };
 
 #endif // EDITDIALOG_H

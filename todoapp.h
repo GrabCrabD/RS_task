@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QVector>
 #include "task.h"
+#include "editdialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class toDoApp; }
@@ -31,17 +32,18 @@ private slots:
     void refreshTasks();
     void saveTasks();
     void loadTasks();
+//    void applyFilter();
 
-    void on_resetStatusButton_clicked();
-
-    void on_doneStatus_clicked();
-
-    void on_allStatus_clicked();
-
-    void on_inProgressStatus_clicked();
+public slots:
+    void slotForm(Task &editedTask, int selectedRow);
 
 private:
     Ui::toDoApp *ui;
     QVector<Task> taskList;
+    editDialog dialogForm;
+    QString filterTitle;
+    QString filterDescription;
+    QDate filterDate;
+    bool filterCompleted;
 };
 #endif // TODOAPP_H
