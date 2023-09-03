@@ -34,7 +34,7 @@ void editDialog::on_editSaveButton_clicked()
     editedTask.setDescription(description);
     editedTask.setDate(date);
 
-    emit saveTask(editedTask, selectedRow);
+    emit saveEditedTask(editedTask, selectedRow);
 
     close();
 }

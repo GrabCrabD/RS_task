@@ -5,6 +5,7 @@
 #include <QColor>
 #include <QDebug>
 #include <QSettings>
+#include <QButtonGroup>
 
 toDoApp::toDoApp(QWidget *parent)
     : QMainWindow(parent)
@@ -14,12 +15,21 @@ toDoApp::toDoApp(QWidget *parent)
     ui->tableWidget->verticalHeader()->setVisible(false);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
+    QDate currentDate = QDate::currentDate();
+    ui->deadlineDate->setDate(currentDate);
+    ui->dateSortFilter->setDate(currentDate);
+
+    QButtonGroup *progressStatusGroup = new QButtonGroup(this);
+    progressStatusGroup->addButton(ui->inProgressTasksFilter);  // 2
+    progressStatusGroup->addButton(ui->doneTasksFilter);        // 1
+    progressStatusGroup->addButton(ui->allTasksFilter);         // 0
+
     ui->editButton->setEnabled(false);
     ui->deleteButton->setEnabled(false);
     ui->changeStatusButton->setEnabled(false);
 
     connect(ui->tableWidget, &QTableWidget::itemSelectionChanged, this, &toDoApp::handleRowSelectionChange);
-    connect(&dialogForm, &editDialog::saveTask, this, &toDoApp::slotForm);
+    connect(&dialogForm, &editDialog::saveEditedTask, this, &toDoApp::getEditedTask);
 
     loadTasks();
     refreshTasks();
@@ -33,7 +43,6 @@ toDoApp::~toDoApp()
 
 void toDoApp::refreshTasks() {
     ui->tableWidget->clearContents();
-
     ui->tableWidget->setRowCount(taskList.size());
 
     for (int row = 0; row < taskList.size(); ++row) {
@@ -120,7 +129,7 @@ void toDoApp::on_editButton_clicked() {
     }
 }
 
-void toDoApp::slotForm(Task &editedTask, int selectedRow) {
+void toDoApp::getEditedTask(Task &editedTask, int selectedRow) {
 
     Task &task = taskList[selectedRow];
     task.setTitle(editedTask.getTitle());
@@ -180,32 +189,105 @@ void toDoApp::loadTasks() {
     settings.endArray();
 }
 
-//void toDoApp::applyFilter() {
-//    QList<Task> filteredTasks;
+void toDoApp::applyFilter() {
+    QList<Task> filteredTasks;
 
-//    for (Task &task : taskList) {
-//        bool passFilter = true;
+    for (Task &task : taskList) {
+        bool passFilter = true;
 
-//        if (!filterTitle.isEmpty() && !task.getTitle().contains(filterTitle)) {
-//            passFilter = false;
-//        }
+        if (!filterTitle.isEmpty() && !task.getTitle().contains(filterTitle)) {
+            passFilter = false;
+        }
 
-//        if (!filterDescription.isEmpty() && !task.getDescription().contains(filterDescription)) {
-//            passFilter = false;
-//        }
+        if (!filterDescription.isEmpty() && !task.getDescription().contains(filterDescription)) {
+            passFilter = false;
+        }
 
-//        if (filterDate.isValid() && task.getDate() == filterDate) {
-//            passFilter = false;
-//        }
+        if (filterDate.isValid() && task.getDate() > filterDate) {
+            passFilter = false;
+        }
 
-//        if (filterCompleted && !task.isCompleted()) {
-//            passFilter = false;
-//        }
+        if (filterCompleted == 1 && !task.isCompleted()) {
+            passFilter = false;
+        }
 
-//        if (passFilter) {
-//            filteredTasks.append(task);
-//        }
+        if (filterCompleted == 2 && task.isCompleted()) {
+            passFilter = false;
+        }
 
-//        updateTaskTable(filteredTasks);
-//    }
-//}
+        if (passFilter) {
+            filteredTasks.append(task);
+        }
+
+        updateTaskTable(filteredTasks);
+    }
+}
+
+void toDoApp::updateTaskTable(QList<Task> filteredTasks) {
+    ui->tableWidget->clearContents();
+    ui->tableWidget->setRowCount(filteredTasks.size());
+
+    for (int row = 0; row < filteredTasks.size(); ++row) {
+        Task& task = filteredTasks[row];
+
+        QTableWidgetItem *titleItem = new QTableWidgetItem(task.getTitle());
+        QTableWidgetItem *descripItem = new QTableWidgetItem(task.getDescription());
+        QTableWidgetItem *dateItem = new QTableWidgetItem(task.getDate().toString("dd.MM.yyyy"));
+
+        QLabel *statusLabel = new QLabel();
+        if (task.isCompleted()) {
+            statusLabel->setText("Done");
+            statusLabel->setStyleSheet("color: green;");
+        } else {
+            statusLabel->setText("In progress");
+        }
+
+        ui->tableWidget->setItem(row, 0, titleItem);
+        ui->tableWidget->setItem(row, 1, descripItem);
+        ui->tableWidget->setItem(row, 2, dateItem);
+        ui->tableWidget->setCellWidget(row, 3, statusLabel);
+    }
+}
+
+void toDoApp::on_applyFilterButton_clicked() {
+    filterTitle = ui->filterTitleLine->text();
+    filterDescription = ui->filterDescriptionLine->text();
+    filterDate = ui->dateSortFilter->date();
+
+    if (ui->inProgressTasksFilter->isChecked()) {
+        filterCompleted = 2;
+    } else if (ui->doneTasksFilter->isChecked()) {
+        filterCompleted = 1;
+    } else {
+        filterCompleted = 0;
+    }
+
+    applyFilter();
+}
+
+
+void toDoApp::on_resetFilterButton_clicked()
+{
+    refreshTasks();
+    ui->allTasksFilter->setChecked(true);
+    ui->tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
+}
+
+
+void toDoApp::on_tabWidget_currentChanged(int index)
+{
+    if (index == 1) {
+        ui->editButton->setEnabled(false);
+        ui->deleteButton->setEnabled(false);
+        ui->changeStatusButton->setEnabled(false);
+        ui->tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
+
+    } else {
+        ui->editButton->setEnabled(true);
+        ui->deleteButton->setEnabled(true);
+        ui->changeStatusButton->setEnabled(true);
+        ui->tableWidget->setSelectionMode(QAbstractItemView::SingleSelection);
+
+    }
+}
+

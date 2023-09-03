@@ -32,18 +32,26 @@ private slots:
     void refreshTasks();
     void saveTasks();
     void loadTasks();
-//    void applyFilter();
+    void applyFilter();
+    void updateTaskTable(QList<Task> filteredTasks);
+
+    void on_applyFilterButton_clicked();
+
+    void on_resetFilterButton_clicked();
+
+    void on_tabWidget_currentChanged(int index);
 
 public slots:
-    void slotForm(Task &editedTask, int selectedRow);
+    void getEditedTask(Task &editedTask, int selectedRow);
 
 private:
     Ui::toDoApp *ui;
     QVector<Task> taskList;
     editDialog dialogForm;
+
     QString filterTitle;
     QString filterDescription;
     QDate filterDate;
-    bool filterCompleted;
+    int filterCompleted;
 };
 #endif // TODOAPP_H

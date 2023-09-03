@@ -20,7 +20,7 @@ public:
     void setTaskInfo(const Task &task, int selectedRow);
 
 signals:
-    void saveTask(Task &, int);
+    void saveEditedTask(Task &, int);
 
 private slots:
     void on_editSaveButton_clicked();
