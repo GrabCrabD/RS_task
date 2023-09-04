@@ -18,6 +18,9 @@ lint:
 fmt:
 	@clang-format --style=Google --Werror -i $(SRC) $(HEADERS) && echo "Formatted"
 
+tests: all
+	chmod +x ../build/tests/my_test
+	../build/tests/my_test
 
 clean:
 	rm -rf $(BUILD_DIR)
