@@ -8,7 +8,7 @@ add_executable(
 )
 target_link_libraries(
   my_test
-  PRIVATE rs_task Gtest::gtest_main
+  PRIVATE rs_task GTest::gtest_main
 )
 
 add_test(

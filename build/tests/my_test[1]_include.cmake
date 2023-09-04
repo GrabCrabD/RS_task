@@ -1,0 +1,5 @@
+if(EXISTS "/Users/dmitriy/repository/for git/RS/toDoApp/build/tests/my_test[1]_tests.cmake")
+  include("/Users/dmitriy/repository/for git/RS/toDoApp/build/tests/my_test[1]_tests.cmake")
+else()
+  add_test(my_test_NOT_BUILT my_test_NOT_BUILT)
+endif()
