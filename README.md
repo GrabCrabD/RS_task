@@ -8,11 +8,12 @@
 
 Графический интерфейс  
 
-<img src="materials/add.png" alt="image" width="500" height="auto">
 <center>(рис. 1) add task
 
-<img src="materials/sort.png" alt="image" width="500" height="auto">
+<img src="materials/add.png" alt="image" width="500" height="auto">
+
 (рис. 2) sort task  
+<img src="materials/sort.png" alt="image" width="500" height="auto">
 
 </center>
 
