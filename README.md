@@ -6,11 +6,15 @@
 
 Приложение Mенеджер задач (TODO-list).
 
-Графический интерфейс
+Графический интерфейс  
 
-| ![add_task](materials/add.png) | - add task   |
-| ------------------------ | --------------------------- |
-| ![sort_tasks](materials/sort.png) | - sort task |
+<center>(рис. 1) add task.</center>  
+
+![add_task](materials/add.png)
+
+<center>(рис. 2) sort task.</center>  
+
+![sort_tasks](materials/sort.png)
 
 1. Необходимо отображать список текущих задач
 2. Должны быть интерфейсы управления задачами в списке согласно командам
