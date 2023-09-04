@@ -8,13 +8,13 @@
 
 Графический интерфейс  
 
-<center>(рис. 1) add task.</center>  
+<img src="materials/add.png" alt="image" width="500" height="auto">
+<center>(рис. 1) add task
 
-![add_task](materials/add.png)
+<img src="materials/sort.png" alt="image" width="500" height="auto">
+(рис. 2) sort task  
 
-<center>(рис. 2) sort task.</center>  
-
-![sort_tasks](materials/sort.png)
+</center>
 
 1. Необходимо отображать список текущих задач
 2. Должны быть интерфейсы управления задачами в списке согласно командам
